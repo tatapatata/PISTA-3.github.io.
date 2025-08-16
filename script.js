@@ -18,9 +18,8 @@ document.addEventListener('DOMContentLoaded', () => {
         '10': 'var(--color-10)'
     };
 
+    // --- NUEVA MATRIZ DETALLADA DE LA IMAGEN ---
     const imagePattern = [
-        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
@@ -76,54 +75,66 @@ document.addEventListener('DOMContentLoaded', () => {
         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
     ];
     
-    // Aquí puedes detallar el patrón de tu imagen.
-    // Ejemplo de un patrón básico (mapache a la izquierda, panda a la derecha, tomados de la mano)
-    // Este es un ejemplo simplificado, puedes expandirlo para más detalle.
-    for (let i = 0; i < imagePattern.length; i++) {
-        for (let j = 0; j < imagePattern[i].length; j++) {
-            // Mapache (izquierda)
-            if (i > 10 && i < 40 && j > 5 && j < 25) {
-                if ((j >= 8 && j <= 12 && i > 20 && i < 30) || (j >= 18 && j <= 22 && i > 20 && i < 30)) {
-                    imagePattern[i][j] = 9; // Gris oscuro para ojos
-                } else if (i > 15 && i < 35 && j > 10 && j < 20) {
-                    imagePattern[i][j] = 8; // Marrón para el cuerpo
-                } else if (i > 18 && i < 22 && j > 14 && j < 16) {
-                    imagePattern[i][j] = 10; // Negro para la nariz
-                } else if (i > 30 && i < 35 && j > 15 && j < 20) {
-                    imagePattern[i][j] = 1; // Rojo para las mejillas (un detalle)
-                } else {
-                    imagePattern[i][j] = 9; // Gris para el resto
-                }
-            }
-
-            // Panda Rojo (derecha)
-            if (i > 10 && i < 40 && j > 25 && j < 45) {
-                if (i > 15 && i < 35 && j > 30 && j < 40) {
-                     imagePattern[i][j] = 2; // Naranja para el cuerpo
-                } else if (i > 18 && i < 22 && j > 34 && j < 36) {
-                    imagePattern[i][j] = 10; // Ojos negros
-                } else if (i > 30 && i < 35 && j > 35 && j < 40) {
-                    imagePattern[i][j] = 3; // Amarillo para el hocico
-                }
-                 else {
-                    imagePattern[i][j] = 2;
-                }
-            }
-
-            // Manos tomadas (cruce)
-            if (i > 32 && i < 38 && j >= 24 && j <= 26) {
-                imagePattern[i][j] = 8; // Manos del mapache
-            }
-            if (i > 32 && i < 38 && j >= 27 && j <= 29) {
-                imagePattern[i][j] = 2; // Manos del panda
-            }
-
-            if (i > 32 && i < 38 && j === 25) {
-                imagePattern[i][j] = 10;
+    // Aquí está el patrón de dibujo corregido.
+    // Mapache a la izquierda, Panda Rojo a la derecha, tomados de la mano.
+    for(let i = 0; i < 50; i++) {
+        for(let j = 0; j < 50; j++) {
+            // Relleno principal del mapache y panda
+            if(j < 25) {
+                imagePattern[i][j] = 9; // Gris oscuro
+            } else {
+                imagePattern[i][j] = 2; // Naranja
             }
         }
     }
 
+    // Dibujando el detalle del Mapache (Gris, Negro, Marrón)
+    for(let i=10; i<40; i++) {
+        for(let j=10; j<25; j++) {
+            if((i > 15 && i < 20) || (i > 30 && i < 35)) {
+                if((j > 10 && j < 15) || (j > 20 && j < 25)) {
+                    imagePattern[i][j] = 10; // Ojos negros
+                }
+            }
+            if(i>20 && i<30 && j>12 && j<16) {
+                imagePattern[i][j] = 8; // Nariz y boca
+            }
+        }
+    }
+    
+    // Dibujando el detalle del Panda Rojo (Naranja, Negro, Amarillo, Rojo)
+    for(let i=10; i<40; i++) {
+        for(let j=25; j<40; j++) {
+            if((i > 15 && i < 20) || (i > 30 && i < 35)) {
+                if((j > 25 && j < 30) || (j > 35 && j < 40)) {
+                    imagePattern[i][j] = 10; // Ojos negros
+                }
+            }
+            if(i>20 && i<30 && j>30 && j<34) {
+                imagePattern[i][j] = 3; // Hocico amarillo
+            }
+            if(i>35 && i<40 && j>25 && j<40) {
+                imagePattern[i][j] = 1; // Mejillas rojas
+            }
+        }
+    }
+
+    // Dibuja un corazón entre ellos
+    for(let i=25; i<30; i++) {
+        for(let j=23; j<27; j++) {
+            imagePattern[i][j] = 1;
+        }
+    }
+    imagePattern[24][24] = 1;
+    imagePattern[24][25] = 1;
+    imagePattern[29][24] = 1;
+    imagePattern[29][25] = 1;
+
+    // Manos tomadas (cruce)
+    imagePattern[35][24] = 8;
+    imagePattern[36][24] = 8;
+    imagePattern[35][25] = 2;
+    imagePattern[36][25] = 2;
 
     let totalPintables = 0;
     imagePattern.forEach(row => {
@@ -134,7 +145,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function createGrid() {
         const gridSize = window.innerWidth > 768 ? 50 : 30;
-        const pixelSize = window.innerWidth > 768 ? 20 : 15;
+        const pixelSize = window.innerWidth > 768 ? 10 : 15;
         
         pixelGrid.style.gridTemplateColumns = `repeat(${gridSize}, ${pixelSize}px)`;
 
@@ -185,3 +196,4 @@ document.addEventListener('DOMContentLoaded', () => {
 
     createGrid();
 });
+    
