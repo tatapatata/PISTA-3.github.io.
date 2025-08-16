@@ -1,350 +1,287 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Colorea por números — Panda rojo & Mapache</title>
+<title>Pinta por Números – Panda Rojo & Mapache</title>
 <style>
   :root{
-    --bg:#0f1220;
-    --card:#151a2b;
-    --ink:#eaeaf2;
-    --muted:#9aa3b2;
-    --ok:#49d17d;
-    --accent:#a78bfa;
+    --bg:#0f1221; --panel:#11162a; --ink:#d8e1ff; --muted:#8ea2ff33;
   }
-  *{box-sizing:border-box}
-  body{
-    margin:0;
-    font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial;
-    background: radial-gradient(1200px 800px at 20% -10%, #1b2140 0%, #0f1220 55%);
-    color:var(--ink);
-    min-height:100dvh;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    padding:24px;
-  }
-  .wrap{width:min(1000px,96vw)}
-  .title{
-    text-align:center;
-    margin:0 0 8px 0;
-    letter-spacing:.3px;
-  }
-  .subtitle{color:var(--muted); text-align:center; margin:0 0 18px}
-  .board{
-    display:grid;
-    grid-template-columns: 320px 1fr;
-    gap:18px;
-  }
-  @media (max-width:860px){
-    .board{grid-template-columns: 1fr; gap:12px;}
-  }
-  .card{
-    background:linear-gradient(180deg, #171d33, #14192a);
-    border:1px solid #222744;
-    border-radius:16px;
-    box-shadow: 0 10px 30px rgba(0,0,0,.35);
-    padding:14px;
-  }
-  .palette{
-    display:grid;
-    grid-template-columns: repeat(3, minmax(0,1fr));
-    gap:10px;
-    margin-top:8px;
-  }
-  .swatch{
-    display:flex; align-items:center; gap:10px;
-    padding:10px; border-radius:12px; border:1px solid #232741;
-    cursor:pointer; user-select:none;
-    transition:transform .06s ease, border-color .2s ease;
-  }
-  .swatch:hover{ transform: translateY(-2px); }
-  .swatch.active{ border-color: var(--accent); outline: 2px solid color-mix(in oklab, white 12%, transparent); }
-  .dot{
-    width:26px; height:26px; border-radius:8px; border:1px solid rgba(0,0,0,.25);
-  }
-  .legend{ color:var(--muted); font-size:.92rem; margin-top:6px; line-height:1.25rem; }
-  svg{
-    width:100%; height:auto; display:block; background:#0c1020;
-    border-radius:16px; border:1px solid #222744;
-  }
-  .zone{ fill:#0c1020; stroke:#3a4169; stroke-width:2; cursor:pointer; transition: fill .15s ease; }
-  .num{ fill:#94a3b8; font-weight:700; font-size:18px; pointer-events:none; user-select:none; }
-  .toolbar{
-    display:flex; gap:10px; flex-wrap:wrap; margin-top:12px;
-  }
-  button{
-    background:#222849; color:#eaeaf2; border:1px solid #2a3160; padding:10px 14px; border-radius:12px;
-    cursor:pointer; font-weight:600; letter-spacing:.2px;
-  }
-  button:hover{ filter:brightness(1.05); }
-  .hint{ color:#cbd5e1; }
-  .progress{
-    margin-top:10px; color:var(--muted); font-size:.95rem;
-  }
-  /* Modal */
-  .modal{
-    position:fixed; inset:0; display:flex; align-items:center; justify-content:center;
-    background:rgba(6,8,20,.75); backdrop-filter: blur(6px);
-    opacity:0; pointer-events:none; transition: opacity .25s ease;
-    padding:24px;
-  }
-  .modal.show{ opacity:1; pointer-events:auto; }
-  .modal-card{
-    width:min(680px, 96vw);
-    background:linear-gradient(180deg, #171d33, #14192a);
-    border:1px solid #2a3160;
-    border-radius:18px; padding:20px;
-    text-align:center;
-  }
-  .modal h2{ margin:10px 0 8px }
-  .qr{
-    width:min(380px, 72vw);
-    aspect-ratio:1/1;
-    background:#fff; margin:16px auto; border-radius:12px; padding:8px;
-    display:flex; align-items:center; justify-content:center;
-  }
-  .qr img{ width:100%; height:100%; object-fit:contain; }
-  .success{ color:var(--ok); font-weight:800; letter-spacing:.3px; }
-  .tiny{ color:var(--muted); font-size:.9rem; }
-  .footer-note{ text-align:center; color:#8b93ad; margin-top:12px; font-size:.9rem }
+  html,body{margin:0;height:100%;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,sans-serif}
+  .wrap{display:grid;grid-template-columns:320px 1fr;gap:16px;height:100%}
+  .left{background:var(--panel);padding:18px 16px;overflow:auto}
+  .title{font-size:22px;font-weight:800;margin:0 0 6px}
+  .sub{opacity:.8;margin:0 0 14px}
+  .palette{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin:8px 0 14px}
+  .sw{height:36px;border-radius:10px;border:2px solid #ffffff33;cursor:pointer;outline:0;display:flex;align-items:center;justify-content:center;font-weight:700}
+  .sw.active{box-shadow:0 0 0 3px #ffffff66}
+  .legend{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;font-size:14px}
+  .legend div{display:flex;gap:8px;align-items:center;background:#ffffff08;border:1px solid #ffffff12;border-radius:10px;padding:8px 10px}
+  .legend b{display:inline-grid;place-items:center;width:26px;height:26px;border-radius:8px;border:2px solid #ffffff22}
+  .btn{appearance:none;border:0;background:#4f6aff;color:white;border-radius:12px;padding:10px 14px;font-weight:700;cursor:pointer}
+  .btn.ghost{background:#ffffff10}
+  .tog{display:flex;align-items:center;gap:8px;margin-top:8px}
+  .stage{position:relative;overflow:auto;background:#0b0f1f;border-left:1px solid #ffffff10}
+  svg{max-width:none;width:2000px;height:2000px;display:block;margin:auto;background:#0b0f1f}
+  .area{fill:#00000000;stroke:#b9c6ff;stroke-opacity:.55;stroke-width:4;cursor:pointer;transition:transform .08s ease}
+  .area:hover{transform:scale(1.01)}
+  .num{font: 64px/1.1 ui-monospace,Menlo,Consolas,monospace;fill:#b9c6ff;opacity:.7;pointer-events:none}
+  .hiddenNums .num{display:none}
+  .wrong{animation:shake .28s linear 1}
+  @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+  .qrWrap{position:absolute;inset:0;display:none;place-items:center;background:#0b0f1fcc;backdrop-filter:blur(4px)}
+  .qrCard{background:#0f142a;border:1px solid #ffffff22;border-radius:20px;padding:20px;max-width:560px;text-align:center;box-shadow:0 12px 40px #0008}
+  .qrCard img{width:320px;height:320px;object-fit:contain;border-radius:14px;border:1px solid #ffffff22;background:white}
+  .done{display:inline-block;margin-top:10px;font-weight:700;color:#9be7ff}
+  .progress{margin-top:10px;font-size:14px;opacity:.8}
+  .footer{opacity:.7;font-size:12px;margin-top:16px}
 </style>
 </head>
 <body>
 <div class="wrap">
-  <h1 class="title">Pinta por Números — <span style="opacity:.85">Panda rojo & Mapache</span></h1>
-  <p class="subtitle">Elige un color, haz clic en las zonas numeradas y completa el dúo. Cuando todo esté correcto… algo se revelará ✨</p>
+  <aside class="left">
+    <h1 class="title">Pinta por números</h1>
+    <p class="sub">Elige un <b>número</b> y pinta solo las zonas con ese número. Cuando completes todo, aparecerá una sorpresa.</p>
 
-  <div class="board">
-    <!-- Lienzo -->
-    <div class="card">
-      <!-- SVG súper simplificado estilo “libro de colorear” -->
-      <svg viewBox="0 0 700 420" aria-labelledby="title desc" role="img">
-        <title id="title">Panda rojo y Mapache tomados de la mano</title>
-        <desc id="desc">Ilustración simple con áreas numeradas para colorear correctamente.</desc>
+    <div class="palette" id="palette"></div>
 
-        <!-- SUELO -->
-        <rect x="0" y="360" width="700" height="60" class="zone" data-id="ground" data-need="4"></rect>
-        <text class="num" x="340" y="395">4</text>
+    <div class="legend" id="legend"></div>
 
-        <!-- PANDA ROJO (izquierda) -->
-        <!-- Cola -->
-        <ellipse class="zone" cx="135" cy="285" rx="85" ry="26" transform="rotate(-15 135 285)" data-id="rp_tail" data-need="1"></ellipse>
-        <rect class="zone" x="55" y="272" width="90" height="20" transform="rotate(-15 55 272)" data-id="rp_tail_ring1" data-need="2"></rect>
-        <rect class="zone" x="90" y="276" width="90" height="20" transform="rotate(-15 90 276)" data-id="rp_tail_ring2" data-need="2"></rect>
+    <div class="tog">
+      <button class="btn" id="reset">Reiniciar</button>
+      <button class="btn ghost" id="toggleNums">Mostrar/ocultar números</button>
+    </div>
 
-        <!-- Cuerpo -->
-        <ellipse class="zone" cx="230" cy="280" rx="70" ry="82" data-id="rp_body" data-need="1"></ellipse>
-        <!-- Barriga clara -->
-        <ellipse class="zone" cx="230" cy="300" rx="38" ry="46" data-id="rp_belly" data-need="5"></ellipse>
+    <div class="progress" id="progress">Progreso: 0 / 32 zonas</div>
+    <p class="footer">Consejo: haz zoom con dos dedos (móvil) o Ctrl+rueda (PC) en el navegador para detalles finos.</p>
+  </aside>
 
-        <!-- Cabeza -->
-        <ellipse class="zone" cx="230" cy="190" rx="65" ry="55" data-id="rp_face" data-need="1"></ellipse>
-        <!-- Máscara clara -->
-        <ellipse class="zone" cx="230" cy="205" rx="38" ry="28" data-id="rp_mask" data-need="5"></ellipse>
-        <!-- Orejas -->
-        <circle class="zone" cx="185" cy="155" r="20" data-id="rp_ear_l" data-need="1"></circle>
-        <circle class="zone" cx="275" cy="155" r="20" data-id="rp_ear_r" data-need="1"></circle>
-        <circle class="zone" cx="185" cy="155" r="10" data-id="rp_ear_l_in" data-need="2"></circle>
-        <circle class="zone" cx="275" cy="155" r="10" data-id="rp_ear_r_in" data-need="2"></circle>
-
-        <!-- Manito que toma -->
-        <circle class="zone" cx="300" cy="300" r="16" data-id="rp_hand" data-need="1"></circle>
-
-        <!-- Números del panda rojo -->
-        <text class="num" x="230" y="192">1</text>
-        <text class="num" x="230" y="308">5</text>
-        <text class="num" x="230" y="270">1</text>
-        <text class="num" x="183" y="158">1</text>
-        <text class="num" x="275" y="158">1</text>
-        <text class="num" x="185" y="158" dy="14">2</text>
-        <text class="num" x="275" y="158" dy="14">2</text>
-        <text class="num" x="300" y="304">1</text>
-        <text class="num" x="135" y="290">1</text>
-        <text class="num" x="100" y="280">2</text>
-        <text class="num" x="140" y="284">2</text>
-
-        <!-- MAPACHE (derecha) -->
-        <!-- Cola con franjas -->
-        <ellipse class="zone" cx="560" cy="290" rx="90" ry="28" transform="rotate(15 560 290)" data-id="rac_tail" data-need="3"></ellipse>
-        <rect class="zone" x="516" y="278" width="90" height="20" transform="rotate(15 516 278)" data-id="rac_tail_band1" data-need="6"></rect>
-        <rect class="zone" x="554" y="286" width="90" height="20" transform="rotate(15 554 286)" data-id="rac_tail_band2" data-need="6"></rect>
-
-        <!-- Cuerpo -->
-        <ellipse class="zone" cx="470" cy="280" rx="70" ry="82" data-id="rac_body" data-need="3"></ellipse>
-        <!-- Barriga -->
-        <ellipse class="zone" cx="470" cy="300" rx="38" ry="46" data-id="rac_belly" data-need="4"></ellipse>
-
-        <!-- Cabeza -->
-        <ellipse class="zone" cx="470" cy="190" rx="65" ry="55" data-id="rac_face" data-need="4"></ellipse>
-        <!-- Máscara oscura -->
-        <ellipse class="zone" cx="470" cy="205" rx="42" ry="22" data-id="rac_mask" data-need="6"></ellipse>
-        <!-- Orejas -->
-        <circle class="zone" cx="425" cy="155" r="20" data-id="rac_ear_l" data-need="4"></circle>
-        <circle class="zone" cx="515" cy="155" r="20" data-id="rac_ear_r" data-need="4"></circle>
-        <circle class="zone" cx="425" cy="155" r="10" data-id="rac_ear_l_in" data-need="6"></circle>
-        <circle class="zone" cx="515" cy="155" r="10" data-id="rac_ear_r_in" data-need="6"></circle>
-
-        <!-- Manito que toma -->
-        <circle class="zone" cx="400" cy="300" r="16" data-id="rac_hand" data-need="3"></circle>
-
-        <!-- Números del mapache -->
-        <text class="num" x="470" y="192">4</text>
-        <text class="num" x="470" y="308">4</text>
-        <text class="num" x="470" y="270">3</text>
-        <text class="num" x="515" y="158">4</text>
-        <text class="num" x="425" y="158">4</text>
-        <text class="num" x="515" y="168">6</text>
-        <text class="num" x="425" y="168">6</text>
-        <text class="num" x="400" y="304">3</text>
-        <text class="num" x="560" y="294">3</text>
-        <text class="num" x="528" y="286">6</text>
-        <text class="num" x="566" y="294">6</text>
-
-        <!-- MANOS UNIDAS (pequeño corazón entre manos) -->
-        <path class="zone" d="M350 292c10-12 22-12 32 0-10 18-22 18-32 0z" data-id="heart" data-need="2"></path>
-        <text class="num" x="360" y="292">2</text>
-      </svg>
-
-      <div class="progress" id="progress">Zonas correctas: 0 / 24</div>
-      <div class="toolbar">
-        <button id="reset">Reiniciar</button>
-        <button id="hint" class="hint">Mostrar/Ocultar guía</button>
+  <main class="stage">
+    <!-- capa QR al completar -->
+    <div class="qrWrap" id="qr">
+      <div class="qrCard">
+        <h2>¡Completado! 🧩</h2>
+        <p>Escanéame para seguir con la siguiente pista.</p>
+        <img src="qr.png" alt="QR siguiente pista">
+        <div class="done">Desbloqueado: Panda rojo + Mapache</div>
       </div>
     </div>
 
-    <!-- Paleta + Guía -->
-    <div class="card">
-      <h3 style="margin:6px 6px 10px">Paleta</h3>
-      <div id="palette" class="palette">
-        <!-- Los colores se inyectan por JS -->
-      </div>
-      <div class="legend" id="legend" style="display:none; margin-top:12px">
-        <strong>Guía:</strong><br/>
-        1 = Rojo (panda rojo) · 2 = Naranja (interior orejas / corazón) · 3 = Gris oscuro (mapache) ·
-        4 = Gris claro (mapache & suelo) · 5 = Crema (manchas claras panda) · 6 = Negro (máscara mapache)
-      </div>
-      <p class="footer-note">Pista: cuando todo esté perfecto, aparecerá una nueva ventana…</p>
-    </div>
-  </div>
-</div>
+    <!-- Lienzo 2000x2000 -->
+    <svg id="board" viewBox="0 0 2000 2000" aria-label="Pinta por números">
+      <!-- Fondo decorativo -->
+      <defs>
+        <radialGradient id="bgGrad" cx="50%" cy="30%" r="70%">
+          <stop offset="0%" stop-color="#12204a"/>
+          <stop offset="100%" stop-color="#0b0f1f"/>
+        </radialGradient>
+      </defs>
+      <rect x="0" y="0" width="2000" height="2000" fill="url(#bgGrad)"/>
 
-<!-- Modal con el QR -->
-<div id="modal" class="modal" aria-hidden="true">
-  <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="winTitle">
-    <h2 id="winTitle" class="success">¡Completado! 🌟</h2>
-    <p>Desbloqueaste la pista secreta. Escanea el QR o toca el botón para abrir la playlist.</p>
-    <div class="qr"><img src="qr.png" alt="Código QR a la playlist" /></div>
-    <p><a id="openLink" target="_blank" rel="noopener" href="https://open.spotify.com/playlist/6rGxHrCj9w4WLERyNcsbBK?si=rLIOE8kHTDuNQpqXp7lUuw&pi=WxPawjn9RyWAr&nd=1&dlsi=e72b2da00549458d">
-      <button>Abrir la playlist directamente</button>
-    </a></p>
-    <p class="tiny">Si no ves el QR, asegúrate de subir <code>qr.png</code> al mismo repositorio.</p>
-  </div>
+      <!-- ===== Panda rojo (izquierda) ===== -->
+      <g id="redPanda" transform="translate(260,380)">
+        <!-- cuerpo principal -->
+        <ellipse class="area" data-num="1" id="rp_body" cx="520" cy="760" rx="420" ry="520"/>
+        <text class="num" x="480" y="760">1</text>
+
+        <!-- vientre claro -->
+        <ellipse class="area" data-num="3" id="rp_belly" cx="520" cy="1020" rx="260" ry="300"/>
+        <text class="num" x="480" y="1040">3</text>
+
+        <!-- cabeza -->
+        <circle class="area" data-num="1" id="rp_head" cx="520" cy="380" r="260"/>
+        <text class="num" x="480" y="390">1</text>
+
+        <!-- orejas -->
+        <ellipse class="area" data-num="3" id="rp_earL" cx="360" cy="200" rx="120" ry="140"/>
+        <text class="num" x="340" y="210">3</text>
+        <ellipse class="area" data-num="3" id="rp_earR" cx="680" cy="200" rx="120" ry="140"/>
+        <text class="num" x="660" y="210">3</text>
+
+        <!-- mofletes claros -->
+        <ellipse class="area" data-num="3" id="rp_cheekL" cx="420" cy="420" rx="110" ry="90"/>
+        <text class="num" x="400" y="430">3</text>
+        <ellipse class="area" data-num="3" id="rp_cheekR" cx="620" cy="420" rx="110" ry="90"/>
+        <text class="num" x="600" y="430">3</text>
+
+        <!-- nariz oscura -->
+        <ellipse class="area" data-num="10" id="rp_nose" cx="520" cy="420" rx="46" ry="36"/>
+        <text class="num" x="508" y="430">10</text>
+
+        <!-- pata izquierda -->
+        <ellipse class="area" data-num="6" id="rp_legL" cx="360" cy="1240" rx="120" ry="160"/>
+        <text class="num" x="340" y="1250">6</text>
+
+        <!-- pata derecha -->
+        <ellipse class="area" data-num="6" id="rp_legR" cx="680" cy="1240" rx="120" ry="160"/>
+        <text class="num" x="660" y="1250">6</text>
+
+        <!-- brazo izquierdo -->
+        <ellipse class="area" data-num="6" id="rp_armL" cx="290" cy="860" rx="110" ry="170" transform="rotate(-20 290 860)"/>
+        <text class="num" x="260" y="860">6</text>
+
+        <!-- brazo derecho (uniendo mano con mapache) -->
+        <ellipse class="area" data-num="6" id="rp_armR" cx="760" cy="860" rx="110" ry="170" transform="rotate(20 760 860)"/>
+        <text class="num" x="740" y="860">6</text>
+
+        <!-- cola anillada (varias zonas para más detalle) -->
+        <g id="rp_tail" transform="translate(100,1120) rotate(12)">
+          <ellipse class="area" data-num="1" cx="930" cy="110" rx="320" ry="140"/>
+          <text class="num" x="880" y="120">1</text>
+          <rect class="area" data-num="2" x="720" y="30" width="180" height="160" rx="70"/>
+          <text class="num" x="760" y="120">2</text>
+          <rect class="area" data-num="4" x="910" y="30" width="180" height="160" rx="70"/>
+          <text class="num" x="950" y="120">4</text>
+          <rect class="area" data-num="2" x="1100" y="30" width="180" height="160" rx="70"/>
+          <text class="num" x="1140" y="120">2</text>
+        </g>
+      </g>
+
+      <!-- ===== Mapache (derecha) ===== -->
+      <g id="raccoon" transform="translate(1120,430)">
+        <!-- cuerpo -->
+        <ellipse class="area" data-num="9" id="rc_body" cx="340" cy="760" rx="380" ry="520"/>
+        <text class="num" x="310" y="770">9</text>
+
+        <!-- vientre claro -->
+        <ellipse class="area" data-num="5" id="rc_belly" cx="340" cy="1020" rx="240" ry="300"/>
+        <text class="num" x="320" y="1040">5</text>
+
+        <!-- cabeza -->
+        <circle class="area" data-num="9" id="rc_head" cx="340" cy="380" r="240"/>
+        <text class="num" x="310" y="390">9</text>
+
+        <!-- orejas -->
+        <ellipse class="area" data-num="5" id="rc_earL" cx="210" cy="190" rx="100" ry="120"/>
+        <text class="num" x="195" y="200">5</text>
+        <ellipse class="area" data-num="5" id="rc_earR" cx="470" cy="190" rx="100" ry="120"/>
+        <text class="num" x="455" y="200">5</text>
+
+        <!-- antifaz oscuro -->
+        <ellipse class="area" data-num="10" id="rc_mask" cx="340" cy="380" rx="220" ry="120"/>
+        <text class="num" x="320" y="390">10</text>
+
+        <!-- ojos claros -->
+        <circle class="area" data-num="5" id="rc_eyeL" cx="270" cy="380" r="50"/>
+        <text class="num" x="255" y="390">5</text>
+        <circle class="area" data-num="5" id="rc_eyeR" cx="410" cy="380" r="50"/>
+        <text class="num" x="395" y="390">5</text>
+
+        <!-- nariz -->
+        <ellipse class="area" data-num="10" id="rc_nose" cx="340" cy="440" rx="36" ry="28"/>
+        <text class="num" x="330" y="448">10</text>
+
+        <!-- patas -->
+        <ellipse class="area" data-num="8" id="rc_legL" cx="210" cy="1240" rx="110" ry="160"/>
+        <text class="num" x="190" y="1250">8</text>
+        <ellipse class="area" data-num="8" id="rc_legR" cx="470" cy="1240" rx="110" ry="160"/>
+        <text class="num" x="450" y="1250">8</text>
+
+        <!-- brazos (uniendo mano con panda) -->
+        <ellipse class="area" data-num="8" id="rc_armL" cx="100" cy="860" rx="100" ry="160" transform="rotate(-18 100 860)"/>
+        <text class="num" x="80" y="860">8</text>
+        <ellipse class="area" data-num="8" id="rc_armR" cx="570" cy="860" rx="100" ry="160" transform="rotate(18 570 860)"/>
+        <text class="num" x="550" y="860">8</text>
+
+        <!-- cola anillada -->
+        <g id="rc_tail" transform="translate(200,1120) rotate(-8)">
+          <ellipse class="area" data-num="9" cx="120" cy="110" rx="320" ry="140"/>
+          <text class="num" x="70" y="120">9</text>
+          <rect class="area" data-num="10" x="-60" y="30" width="170" height="160" rx="70"/>
+          <text class="num" x="-15" y="120">10</text>
+          <rect class="area" data-num="7" x="110" y="30" width="170" height="160" rx="70"/>
+          <text class="num" x="150" y="120">7</text>
+          <rect class="area" data-num="10" x="280" y="30" width="170" height="160" rx="70"/>
+          <text class="num" x="320" y="120">10</text>
+        </g>
+
+        <!-- manitas unidas -->
+        <ellipse class="area" data-num="4" id="hands_join" cx="-140" cy="940" rx="90" ry="70"/>
+        <text class="num" x="-165" y="950">4</text>
+      </g>
+    </svg>
+  </main>
 </div>
 
 <script>
-/* ============ Configuración ============ */
+/* ===== Configuración de colores ===== */
 const COLORS = {
-  1: { name: "Rojo",       hex: "#e63946" },
-  2: { name: "Naranja",    hex: "#f4a261" },
-  3: { name: "Gris oscuro",hex: "#464646" },
-  4: { name: "Gris claro", hex: "#b0b0b0" },
-  5: { name: "Crema",      hex: "#fff5d7" },
-  6: { name: "Negro",      hex: "#111111" }
+  1:"#e25544", // rojo panda
+  2:"#f39c12", // naranja anillo
+  3:"#f8e9c9", // crema claro
+  4:"#ffd166", // amarillo cálido
+  5:"#d6e6ff", // celeste muy claro
+  6:"#39558a", // azul oscuro (patas panda)
+  7:"#9b59b6", // púrpura (detalle cola mapache)
+  8:"#566c86", // gris azulado (brazos/patas mapache)
+  9:"#95a5a6", // gris cuerpo mapache
+ 10:"#2e3440"  // oscuro (nariz/antifaz)
 };
 
-// Mapea cada zona -> número correcto
-const ANSWER = {};
-document.querySelectorAll('.zone').forEach(z=>{
-  ANSWER[z.dataset.id] = Number(z.dataset.need);
+/* ===== Construir paleta y leyenda ===== */
+const palette = document.getElementById('palette');
+const legend  = document.getElementById('legend');
+let current = null;
+
+Object.entries(COLORS).forEach(([num,color],i)=>{
+  const b=document.createElement('button');
+  b.className='sw'; b.style.background=color; b.textContent=num;
+  b.onclick=()=>{ document.querySelectorAll('.sw').forEach(s=>s.classList.remove('active')); b.classList.add('active'); current=num; };
+  if(i===0){ b.classList.add('active'); current=num; }
+  palette.appendChild(b);
+
+  const row=document.createElement('div');
+  const dot=document.createElement('b'); dot.style.background=color; dot.textContent=num;
+  const label=document.createElement('span'); label.textContent=`Zona número ${num}`;
+  row.append(dot,label); legend.appendChild(row);
 });
 
-let currentNumber = 1; // color seleccionado
-const paletteEl = document.getElementById('palette');
-const legendEl = document.getElementById('legend');
+/* ===== Lógica de pintado ===== */
+const board = document.getElementById('board');
+const areas = Array.from(board.querySelectorAll('.area'));
 const progressEl = document.getElementById('progress');
-const modal = document.getElementById('modal');
-const totalZones = Object.keys(ANSWER).length;
+const qrLayer = document.getElementById('qr');
+const total = areas.length;
 
-// Construye la paleta
-for (const n of Object.keys(COLORS)) {
-  const data = COLORS[n];
-  const sw = document.createElement('div');
-  sw.className = 'swatch' + (Number(n)===currentNumber ? ' active':'');
-  sw.dataset.num = n;
-
-  const dot = document.createElement('div');
-  dot.className = 'dot';
-  dot.style.background = data.hex;
-
-  const label = document.createElement('div');
-  label.innerHTML = `<strong>${n}</strong> — ${data.name}`;
-
-  sw.appendChild(dot);
-  sw.appendChild(label);
-  sw.addEventListener('click', ()=>{
-    currentNumber = Number(n);
-    [...paletteEl.children].forEach(c=>c.classList.remove('active'));
-    sw.classList.add('active');
-  });
-  paletteEl.appendChild(sw);
-}
-
-// Pintar zonas
-document.querySelectorAll('.zone').forEach(zone=>{
-  zone.addEventListener('click', ()=>{
-    const want = ANSWER[zone.dataset.id];
-    const chosen = currentNumber;
-    // Siempre pinta con el color elegido
-    zone.style.fill = COLORS[chosen].hex;
-
-    // ¿Correcto?
-    if (chosen === want) {
-      zone.dataset.ok = '1';
-    } else {
-      zone.dataset.ok = '0';
+areas.forEach(a=>{
+  a.addEventListener('click', ()=>{
+    if(!current) return;
+    const needs = a.getAttribute('data-num');
+    if(String(current)===String(needs)){
+      a.style.fill = COLORS[needs];
+      a.setAttribute('data-done','1');
+      checkDone();
+    }else{
+      a.classList.remove('wrong'); // reset anim
+      void a.offsetWidth;          // reflow
+      a.classList.add('wrong');    // shake
     }
-    updateProgress();
-  });
+  }, false);
 });
 
-function updateProgress(){
-  const okCount = [...document.querySelectorAll('.zone')]
-    .filter(z => z.dataset.ok === '1').length;
-
-  progressEl.textContent = `Zonas correctas: ${okCount} / ${totalZones}`;
-
-  if (okCount === totalZones) {
-    win();
-  }
+function checkDone(){
+  const done = areas.filter(a=>a.getAttribute('data-done')==='1').length;
+  progressEl.textContent = `Progreso: ${done} / ${total} zonas`;
+  if(done===total){ qrLayer.style.display='grid'; }
 }
 
-// Reiniciar
-document.getElementById('reset').addEventListener('click', ()=>{
-  document.querySelectorAll('.zone').forEach(z=>{
-    z.style.fill = '#0c1020';
-    z.dataset.ok = '0';
-  });
-  progressEl.textContent = `Zonas correctas: 0 / ${totalZones}`;
-});
+/* ===== Controles ===== */
+document.getElementById('reset').onclick=()=>{
+  areas.forEach(a=>{ a.style.fill='transparent'; a.removeAttribute('data-done'); });
+  qrLayer.style.display='none';
+  current = Object.keys(COLORS)[0];
+  document.querySelectorAll('.sw').forEach((s,i)=>s.classList.toggle('active',i===0));
+  checkDone();
+};
+const boardRoot = document.getElementById('board');
+let numsHidden=false;
+document.getElementById('toggleNums').onclick=()=>{
+  numsHidden = !numsHidden;
+  boardRoot.classList.toggle('hiddenNums', numsHidden);
+};
 
-// Hint
-document.getElementById('hint').addEventListener('click', ()=>{
-  legendEl.style.display = (legendEl.style.display==='none' || !legendEl.style.display) ? 'block' : 'none';
-});
-
-function win(){
-  modal.classList.add('show');
-  modal.setAttribute('aria-hidden','false');
-}
-// Cierra modal haciendo click fuera de la tarjeta
-modal.addEventListener('click', (e)=>{
-  if (e.target === modal) {
-    modal.classList.remove('show');
-    modal.setAttribute('aria-hidden','true');
-  }
-});
+checkDone();
 </script>
 </body>
 </html>
