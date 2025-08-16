@@ -1,0 +1,165 @@
+:root {
+    --color-1: #e76f51;   /* Rojo ladrillo */
+    --color-2: #f4a261;   /* Naranja */
+    --color-3: #e9c46a;   /* Amarillo */
+    --color-4: #2a9d8f;   /* Verde azulado */
+    --color-5: #264653;   /* Azul petróleo */
+    --color-6: #1e6091;   /* Azul oscuro */
+    --color-7: #4682b4;   /* Azul grisáceo */
+    --color-8: #a27b5e;   /* Marrón claro */
+    --color-9: #4a4e69;   /* Gris azulado */
+    --color-10: #000000;  /* Negro */
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #f7f7f7;
+    color: #333;
+    padding: 20px;
+    margin: 0;
+}
+
+h1 {
+    text-align: center;
+    color: #2a9d8f;
+    margin-bottom: 20px;
+}
+
+.controls {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px;
+    padding: 10px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.color-option {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.color-button {
+    width: 35px;
+    height: 35px;
+    border: 2px solid #ccc;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.color-button:hover {
+    transform: scale(1.1);
+}
+
+.color-button.active {
+    border: 3px solid var(--color-9);
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
+}
+
+/* Colores de los botones */
+.color-1 { background-color: var(--color-1); }
+.color-2 { background-color: var(--color-2); }
+.color-3 { background-color: var(--color-3); }
+.color-4 { background-color: var(--color-4); }
+.color-5 { background-color: var(--color-5); }
+.color-6 { background-color: var(--color-6); }
+.color-7 { background-color: var(--color-7); }
+.color-8 { background-color: var(--color-8); }
+.color-9 { background-color: var(--color-9); }
+.color-10 { background-color: var(--color-10); }
+
+.legend-text {
+    font-size: 0.8em;
+    font-weight: bold;
+    margin-top: 5px;
+}
+
+#pixel-grid {
+    display: grid;
+    border: 2px solid #555;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    margin-bottom: 20px;
+    overflow: hidden;
+}
+
+.pixel {
+    width: 20px;
+    height: 20px;
+    border: 1px solid #ddd;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 0.7em;
+    font-weight: bold;
+    color: #555;
+    background-color: #fff;
+    cursor: pointer;
+    user-select: none;
+    transition: background-color 0.1s;
+}
+
+.pixel.colored {
+    border: 1px solid #fff;
+    color: transparent;
+}
+
+/* Responsive design para móviles */
+@media (max-width: 768px) {
+    h1 {
+        font-size: 1.5em;
+    }
+
+    .controls {
+        grid-template-columns: repeat(5, 1fr);
+    }
+    
+    .color-button {
+        width: 30px;
+        height: 30px;
+    }
+
+    .pixel {
+        width: 15px;
+        height: 15px;
+        font-size: 0.6em;
+    }
+}
+
+.completion-message {
+    text-align: center;
+    background-color: #e7f7e7;
+    border: 2px solid #2a9d8f;
+    border-radius: 10px;
+    padding: 20px;
+    animation: fadeIn 1s forwards;
+}
+
+.spotify-link {
+    display: inline-block;
+    background-color: #1DB954;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: bold;
+    margin-top: 10px;
+    transition: background-color 0.3s;
+}
+
+.spotify-link:hover {
+    background-color: #1ed760;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
