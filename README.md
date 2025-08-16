@@ -1,39 +1,26 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pinta por Números</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      text-align: center;
-      background: #111827;
-      color: white;
-      margin: 0;
-    }
-    canvas {
-      border: 2px solid #444;
-      margin-top: 20px;
-      max-width: 95vw;
-      height: auto;
-    }
-    .palette {
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      margin: 20px 0;
-    }
-    .color-btn {
-      width: 40px;
-      height: 40px;
-      border: 2px solid white;
-      border-radius: 50%;
-      margin: 5px;
-      cursor: pointer;
-    }
-    #message {
-      margin-top: 20px;
+# Pintar por Números para Zaye 🐼🦝
+
+¡Hola, Zaye! Este es un proyecto especial de "pintar por números" creado para ti. 
+Tu misión es colorear a un mapache y un panda rojo tomados de la mano.
+
+## ¿Cómo funciona?
+
+1.  Elige un color de la paleta haciendo clic en uno de los 10 botones.
+2.  Haz clic en los números correspondientes en la cuadrícula para pintar los píxeles.
+3.  Pinta todos los píxeles correctamente y ¡recibe una sorpresa al final!
+
+## Tecnologías Utilizadas
+
+* **HTML:** Para la estructura de la página.
+* **CSS:** Para el diseño y la adaptabilidad a diferentes dispositivos (PC y móvil).
+* **JavaScript:** Para la lógica del juego.
+
+## Créditos
+
+* **Creado por:** [Tu Nombre]
+* **Para:** Zaye
+* **Playlist de Spotify:** https://open.spotify.com/playlist/6rGxHrCj9w4WLERyNcsbBK?si=rLIOE8kHTDuNQpqXp7lUuw&pi=WxPawjn9RyWAr&nd=1&dlsi=e72b2da00549458d
+margin-top: 20px;
       font-size: 1.2em;
       font-weight: bold;
       color: #FFD700;
