@@ -1,13 +1,13 @@
 :root {
-    --color-1: #e76f51;   /* Rojo ladrillo */
-    --color-2: #f4a261;   /* Naranja */
-    --color-3: #e9c46a;   /* Amarillo */
-    --color-4: #2a9d8f;   /* Verde azulado */
-    --color-5: #264653;   /* Azul petróleo */
-    --color-6: #1e6091;   /* Azul oscuro */
-    --color-7: #4682b4;   /* Azul grisáceo */
-    --color-8: #a27b5e;   /* Marrón claro */
-    --color-9: #4a4e69;   /* Gris azulado */
+    --color-1: #386665;   /* Verde Oscuro */
+    --color-2: #3f689b;   /* Azul Medio */
+    --color-3: #8a7c93;   /* Grisáceo Violeta */
+    --color-4: #c9939a;   /* Rosa Polvo */
+    --color-5: #d6b8b0;   /* Beige */
+    --color-6: #e4d7c0;   /* Crema */
+    --color-7: #a76b5c;   /* Marrón Rojizo */
+    --color-8: #f6c096;   /* Naranja Claro */
+    --color-9: #f0f0f0;   /* Gris Muy Claro */
     --color-10: #000000;  /* Negro */
 }
 
@@ -121,7 +121,7 @@ h1 {
     .controls {
         grid-template-columns: repeat(5, 1fr);
     }
-    
+
     .color-button {
         width: 30px;
         height: 30px;
